@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Row : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // public array of tiles
+    public Tile[] tiles { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    // sets the tile array
+    private void Awake()
     {
-        
+        tiles = GetComponentsInChildren<Tile>();
     }
 }
