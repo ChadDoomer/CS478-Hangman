@@ -460,6 +460,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c89bc2cfc81ad4186fd86f0af7c07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  emptyState:
+    fillColor: {r: 0.227451, g: 0.19215688, b: 0.18823531, a: 1}
+    outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  occupiedState:
+    fillColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
+    outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  correctState:
+    fillColor: {r: 0.034924157, g: 0.5566038, b: 0, a: 1}
+    outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  wrongSpotState:
+    fillColor: {r: 0.5137995, g: 0.5283019, b: 0, a: 1}
+    outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  incorrectState:
+    fillColor: {r: 0.509434, g: 0, b: 0, a: 1}
+    outlineColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

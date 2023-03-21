@@ -27,6 +27,13 @@ public class Board : MonoBehaviour
     // word picked to guess
     private string word;
 
+    [Header("States")]
+    public Tile.State emptyState;
+    public Tile.State occupiedState;
+    public Tile.State correctState;
+    public Tile.State wrongSpotState;
+    public Tile.State incorrectState;
+
     // assigns the row array
     private void Awake()
     {
@@ -66,6 +73,7 @@ public class Board : MonoBehaviour
             columnIndex = Mathf.Clamp(columnIndex - 1, 0, 5);
             // pressing backspace nulls out the current tile value
             rows[rowIndex].tiles[columnIndex].SetLetter('\0');
+            rows[rowIndex].tiles[columnIndex].SetState(occupiedState);
         }
         else if (columnIndex >= rows[rowIndex].tiles.Length)
         {
@@ -83,6 +91,7 @@ public class Board : MonoBehaviour
                 if (Input.GetKeyDown(ALPHABET[i]))
                 {
                     rows[rowIndex].tiles[columnIndex].SetLetter((char)ALPHABET[i]);
+                    rows[rowIndex].tiles[columnIndex].SetState(occupiedState);
                     columnIndex++;
                     break;
                 }
@@ -99,17 +108,17 @@ public class Board : MonoBehaviour
             if (tile.letter == word[i])
             {
                 //correct letter
-
+                tile.SetState(correctState);
             }
             else if (word.Contains(tile.letter))
             {
                 //wrong spot
-
+                tile.SetState(wrongSpotState);
             }
             else
             {
                 //incorrect letter
-
+                tile.SetState(incorrectState);
             }
         }
 
