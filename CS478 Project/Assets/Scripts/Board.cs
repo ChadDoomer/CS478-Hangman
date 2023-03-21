@@ -16,46 +16,14 @@ public class Board : MonoBehaviour
     // array of rows
     private Row[] rows;
 
-    // arrays for storing word lists from text files
-    private string[] solutions;
-    private string[] validInputs;
-
     // indexes for rows and columns
     private int rowIndex;
     private int columnIndex;
-
-    // word picked to guess
-    private string word;
 
     // assigns the row array
     private void Awake()
     {
         rows = GetComponentsInChildren<Row>();
-    }
-
-    private void Start()
-    {
-        LoadData();
-        SetRandomWord();
-    }
-
-    // function that loads the data from the text files onto the arrays
-    private void LoadData()
-    { 
-        TextAsset textFileAll = Resources.Load("official_wordle_all") as TextAsset;
-        validInputs = textFileAll.text.Split("\n");
-
-        TextAsset textFileCommon = Resources.Load("official_wordle_common") as TextAsset;
-        solutions = textFileCommon.text.Split("\n");
-    }
-
-    // sets a random word to guess from the array, lowercases it, and trims it
-    private void SetRandomWord()
-    {
-        word = solutions[Random.Range(0, solutions.Length)];
-        word = word.ToLower().Trim();
-
-        //word = "blood"; // for testing purposes
     }
 
     private void Update()
@@ -89,38 +57,8 @@ public class Board : MonoBehaviour
             }
         }
     }
-
-    // logic for submitting a row
     private void SubmitRow(Row row)
     {
-        for (int i = 0; i < row.tiles.Length; i++)
-        {
-            Tile tile = row.tiles[i];
-
-            if (tile.letter == word[i])
-            {
-                //correct letter
-
-            }
-            else if (word.Contains(tile.letter))
-            {
-                //wrong spot
-
-            }
-            else
-            {
-                //incorrect letter
-
-            }
-        }
-
-        rowIndex++;
-        columnIndex = 0;
-
-        if(rowIndex >= rows.Length)
-        {
-            //too many guesses
-            enabled = false;
-        }
+        // submit row logic
     }
 }
