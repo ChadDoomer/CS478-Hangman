@@ -73,7 +73,7 @@ public class Board : MonoBehaviour
             columnIndex = Mathf.Clamp(columnIndex - 1, 0, 5);
             // pressing backspace nulls out the current tile value
             rows[rowIndex].tiles[columnIndex].SetLetter('\0');
-            rows[rowIndex].tiles[columnIndex].SetState(occupiedState);
+            rows[rowIndex].tiles[columnIndex].SetState(emptyState);
         }
         else if (columnIndex >= rows[rowIndex].tiles.Length)
         {
