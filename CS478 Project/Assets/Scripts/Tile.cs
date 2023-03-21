@@ -6,6 +6,12 @@ using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
+    public class State
+    {
+        public Color fillColor;
+        public Color outlineColor;
+    }
+
     // creates reference to text component
     private TextMeshProUGUI text;
 
