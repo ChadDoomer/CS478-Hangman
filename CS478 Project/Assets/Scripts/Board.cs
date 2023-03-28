@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
@@ -34,6 +36,11 @@ public class Board : MonoBehaviour
     public Tile.State wrongSpotState;
     public Tile.State incorrectState;
 
+    [Header("UI")]
+    public TextMeshProUGUI invalidWordText;
+    public Button newWordButton;
+    public Button retryButton;
+
     // assigns the row array
     private void Awake()
     {
@@ -43,7 +50,20 @@ public class Board : MonoBehaviour
     private void Start()
     {
         LoadData();
+        NewGame();
+    }
+
+    public void NewGame()
+    {
+        ClearBoard();
         SetRandomWord();
+        enabled = true;
+    }
+
+    public void Retry()
+    {
+        ClearBoard();
+        enabled = true;
     }
 
     // function that loads the data from the text files onto the arrays
@@ -74,6 +94,7 @@ public class Board : MonoBehaviour
             // pressing backspace nulls out the current tile value
             rows[rowIndex].tiles[columnIndex].SetLetter('\0');
             rows[rowIndex].tiles[columnIndex].SetState(emptyState);
+            invalidWordText.gameObject.SetActive(false);
         }
         else if (columnIndex >= rows[rowIndex].tiles.Length)
         {
@@ -101,25 +122,54 @@ public class Board : MonoBehaviour
     // logic for submitting a row
     private void SubmitRow(Row row)
     {
+        if (!IsValid(row.word))
+        {
+            invalidWordText.gameObject.SetActive(true);
+            return;
+        }
+
+        string remaining = word;
+
+        // for loop that determines the correct and incorrect letters
         for (int i = 0; i < row.tiles.Length; i++)
         {
             Tile tile = row.tiles[i];
 
             if (tile.letter == word[i])
             {
-                //correct letter
                 tile.SetState(correctState);
+                remaining = remaining.Remove(i, 1);
+                remaining = remaining.Insert(i, " ");
             }
-            else if (word.Contains(tile.letter))
+            else if (!word.Contains(tile.letter))
             {
-                //wrong spot
-                tile.SetState(wrongSpotState);
-            }
-            else
-            {
-                //incorrect letter
                 tile.SetState(incorrectState);
             }
+        }
+
+        // for loop that determines wrong spot letters
+        for (int i = 0; i < row.tiles.Length; i++)
+        {
+            Tile tile = row.tiles[i];
+
+            if (tile.state != correctState && tile.state != wrongSpotState)
+            {
+                if (remaining.Contains(tile.letter))
+                {
+                    tile.SetState(wrongSpotState);
+
+                    int index = remaining.IndexOf(tile.letter);
+                    remaining = remaining.Remove(index, 1);
+                    remaining = remaining.Insert(index, " ");
+                }
+                else
+                    tile.SetState(incorrectState);
+            }
+        }
+
+        if (HasWon(row))
+        {
+            enabled = false;
         }
 
         rowIndex++;
@@ -130,5 +180,53 @@ public class Board : MonoBehaviour
             //too many guesses
             enabled = false;
         }
+    }
+
+    private bool IsValid(string word)
+    {
+        for (int i = 0; i < validInputs.Length; i++)
+        {
+            if (validInputs[i] == word)
+                return true;
+        }
+        return false;
+    }
+
+    private void ClearBoard()
+    {
+        for (int row = 0; row < rows.Length; row++)
+        {
+            for (int column = 0; column < rows[row].tiles.Length; column++)
+            {
+                rows[row].tiles[column].SetLetter('\0');
+                rows[row].tiles[column].SetState(emptyState);
+            }
+        }
+        rowIndex = 0;
+        columnIndex = 0;
+    }
+
+    private bool HasWon(Row row)
+    {
+        for (int i = 0; i < row.tiles.Length; i++)
+        {
+            if (row.tiles[i].state != correctState)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void OnEnable()
+    {
+        retryButton.gameObject.SetActive(false);
+        newWordButton.gameObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        retryButton.gameObject.SetActive(true);
+        newWordButton.gameObject.SetActive(true);
     }
 }
