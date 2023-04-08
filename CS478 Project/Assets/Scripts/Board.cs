@@ -40,6 +40,7 @@ public class Board : MonoBehaviour
     public TextMeshProUGUI invalidWordText;
     public Button newWordButton;
     public Button retryButton;
+    public Image bloodMeter;
 
     // assigns the row array
     private void Awake()
@@ -57,12 +58,14 @@ public class Board : MonoBehaviour
     {
         ClearBoard();
         SetRandomWord();
+        ResetBlood();
         enabled = true;
     }
 
     public void Retry()
     {
         ClearBoard();
+        ResetBlood();
         enabled = true;
     }
 
@@ -228,5 +231,44 @@ public class Board : MonoBehaviour
     {
         retryButton.gameObject.SetActive(true);
         newWordButton.gameObject.SetActive(true);
+    }
+
+
+
+    public Vector3 position = new Vector3(0, 0);
+    public float speed = 1E-1F;
+    public int endPosition = 300;
+    public float xPos = 0;
+    public Vector3 resetPosition = new Vector3(2000, 900);
+    public Quaternion rotate = new Quaternion();
+
+    void FixedUpdate()
+    {
+        Vector3 movement = new Vector3(position.x + speed, 0);
+        xPos += speed;
+
+        bloodMeter.transform.Translate(movement);
+
+        NoMoreBlood();
+        if (NoMoreBlood())
+        {
+            enabled = false;
+        }
+    }
+
+    public bool NoMoreBlood()
+    {
+        if (xPos >= endPosition)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void ResetBlood()
+    {
+        bloodMeter.transform.SetPositionAndRotation(resetPosition, rotate);
+        xPos = 0;
+        speed = 1E-1F;
     }
 }
