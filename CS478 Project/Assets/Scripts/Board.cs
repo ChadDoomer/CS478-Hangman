@@ -29,6 +29,9 @@ public class Board : MonoBehaviour
     // word picked to guess
     private string word;
 
+    //private char[] bloodArray = new char[0];
+    //private int bloodArrayIndex = 0;
+
     [Header("States")]
     public Tile.State emptyState;
     public Tile.State occupiedState;
@@ -42,6 +45,8 @@ public class Board : MonoBehaviour
     public Button retryButton;
     public Image bloodMeter;
 
+    public int coins = 0;
+
     // assigns the row array
     private void Awake()
     {
@@ -52,6 +57,8 @@ public class Board : MonoBehaviour
     {
         LoadData();
         NewGame();
+        coins = 0;
+        //bloodArrayIndex = 0;
     }
 
     public void NewGame()
@@ -59,6 +66,8 @@ public class Board : MonoBehaviour
         ClearBoard();
         SetRandomWord();
         ResetBlood();
+        coins = 0;
+        //bloodArrayIndex = 0;
         enabled = true;
     }
 
@@ -66,6 +75,7 @@ public class Board : MonoBehaviour
     {
         ClearBoard();
         ResetBlood();
+        //bloodArrayIndex = 0;
         enabled = true;
     }
 
@@ -85,7 +95,7 @@ public class Board : MonoBehaviour
         word = solutions[Random.Range(0, solutions.Length)];
         word = word.ToLower().Trim();
 
-        //word = "blood"; // for testing purposes
+        word = "blood"; // for testing purposes
     }
 
     private void Update()
@@ -143,6 +153,7 @@ public class Board : MonoBehaviour
                 tile.SetState(correctState);
                 remaining = remaining.Remove(i, 1);
                 remaining = remaining.Insert(i, " ");
+                coins += 5;
             }
             else if (!word.Contains(tile.letter))
             {
@@ -164,6 +175,7 @@ public class Board : MonoBehaviour
                     int index = remaining.IndexOf(tile.letter);
                     remaining = remaining.Remove(index, 1);
                     remaining = remaining.Insert(index, " ");
+                    coins += 2;
                 }
                 else
                     tile.SetState(incorrectState);
@@ -220,6 +232,45 @@ public class Board : MonoBehaviour
         }
         return true;
     }
+
+    //private int AssignCoins(Row row)
+    //{
+    //    int coins = 0;
+    //    for (int i = rowIndex; i < row.tiles.Length + rowIndex; i++)
+    //    {
+    //        int x = i - rowIndex;
+    //        Tile thisTile = row.tiles[x];
+    //        char currentLetter = thisTile.letter;
+    //        char currentValue = (char)(currentLetter + x);
+    //        bool inArray = false;
+    //        bool correctSpot = false;
+
+    //        for (int j = 0; j < bloodArray.Length; j++)
+    //        {
+    //            char bloodTile = bloodArray[j];
+
+    //            if (currentValue == bloodTile)
+    //            {
+    //                inArray = true;
+    //            }
+    //        }
+    //        if (row.tiles[x].state == correctState && !inArray)
+    //        {
+    //            coins += 5;
+    //            correctSpot = true;
+    //        }
+    //        else if (row.tiles[x].state == wrongSpotState && !inArray && !correctSpot)
+    //        {
+    //            coins += 2;
+    //        }
+    //        if (!inArray)
+    //        {
+    //            bloodArray[bloodArrayIndex] = currentValue;
+    //            bloodArrayIndex++;
+    //        }
+    //    }
+    //    return coins;
+    //}
 
     private void OnEnable()
     {
