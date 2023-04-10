@@ -44,6 +44,7 @@ public class Board : MonoBehaviour
     public Button newWordButton;
     public Button retryButton;
     public Image bloodMeter;
+    public TextMeshProUGUI coinUI;
 
     public int coins = 0;
 
@@ -58,7 +59,7 @@ public class Board : MonoBehaviour
         LoadData();
         NewGame();
         coins = 0;
-        //bloodArrayIndex = 0;
+        coinUI.text = "Coins: " + coins.ToString();
     }
 
     public void NewGame()
@@ -67,7 +68,7 @@ public class Board : MonoBehaviour
         SetRandomWord();
         ResetBlood();
         coins = 0;
-        //bloodArrayIndex = 0;
+        coinUI.text = "Coins: " + coins.ToString();
         enabled = true;
     }
 
@@ -75,7 +76,6 @@ public class Board : MonoBehaviour
     {
         ClearBoard();
         ResetBlood();
-        //bloodArrayIndex = 0;
         enabled = true;
     }
 
@@ -154,6 +154,7 @@ public class Board : MonoBehaviour
                 remaining = remaining.Remove(i, 1);
                 remaining = remaining.Insert(i, " ");
                 coins += 5;
+                coinUI.text = "Coins: " + coins.ToString();
             }
             else if (!word.Contains(tile.letter))
             {
@@ -176,6 +177,7 @@ public class Board : MonoBehaviour
                     remaining = remaining.Remove(index, 1);
                     remaining = remaining.Insert(index, " ");
                     coins += 2;
+                    coinUI.text = "Coins: " + coins.ToString();
                 }
                 else
                     tile.SetState(incorrectState);
