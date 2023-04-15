@@ -334,6 +334,7 @@ public class Board : MonoBehaviour
         if (coins >= 5)
         {
             bloodMeter.transform.Translate(addBloodMagnitude);
+            xPos += addBloodMagnitude.x;
             coins -= 5;
             coinUI.text = "Coins: " + coins.ToString();
         }
