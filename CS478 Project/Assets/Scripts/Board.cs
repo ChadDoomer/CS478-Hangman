@@ -45,6 +45,8 @@ public class Board : MonoBehaviour
     public Button retryButton;
     public Image bloodMeter;
     public TextMeshProUGUI coinUI;
+    public Button addBlood;
+    public Button slowFlow;
 
     public int coins = 0;
 
@@ -95,7 +97,7 @@ public class Board : MonoBehaviour
         word = solutions[Random.Range(0, solutions.Length)];
         word = word.ToLower().Trim();
 
-        word = "blood"; // for testing purposes
+        //word = "blood"; // for testing purposes
     }
 
     private void Update()
@@ -191,6 +193,7 @@ public class Board : MonoBehaviour
 
         rowIndex++;
         columnIndex = 0;
+        speed += 1E-1F;
 
         if (rowIndex >= rows.Length)
         {
@@ -294,6 +297,7 @@ public class Board : MonoBehaviour
     public float xPos = 0;
     public Vector3 resetPosition = new Vector3(2000, 900);
     public Quaternion rotate = new Quaternion();
+    public Vector3 addBloodMagnitude = new Vector3(-50, 0);
 
     void FixedUpdate()
     {
@@ -323,5 +327,26 @@ public class Board : MonoBehaviour
         bloodMeter.transform.SetPositionAndRotation(resetPosition, rotate);
         xPos = 0;
         speed = 1E-1F;
+    }
+
+    public void AddBlood()
+    {
+        if (coins >= 5)
+        {
+            bloodMeter.transform.Translate(addBloodMagnitude);
+            coins -= 5;
+            coinUI.text = "Coins: " + coins.ToString();
+        }
+            
+    }
+
+    public void SlowFlow()
+    {
+        if (coins >= 5)
+        {
+            speed -= 1E-1F;
+            coins -= 5;
+            coinUI.text = "Coins: " + coins.ToString();
+        }
     }
 }
